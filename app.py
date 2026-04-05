@@ -6,8 +6,6 @@ import os
 app = Flask(__name__)
 app.secret_key = "cms_secret_key"
 
-with app.app_context():
-    create_tables()
 # ---------------- DATABASE CONNECTION ----------------
 def connect_db():
     db_path = os.path.join(os.getcwd(), "new_database.db")
@@ -97,6 +95,8 @@ def create_tables():
     conn.commit()
     conn.close()
 
+with app.app_context():
+    create_tables()
 # ---------------- LOGIN ----------------
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -362,5 +362,6 @@ def logout():
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
+  create_tables()
   app.run()
     
