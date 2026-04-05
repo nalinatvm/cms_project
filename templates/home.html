@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CMS Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f9;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            width: 230px;
+            height: 100%;
+            background: #0b2a4a;
+            padding-top: 30px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.2);
+            padding-left: 35px;
+        }
+
+        /* Main */
+        .main {
+            margin-left: 230px;
+            padding: 40px;
+        }
+
+        .header {
+            font-size: 26px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            display: block; /* IMPORTANT */
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .card h3 {
+            margin: 10px 0;
+            color: #764ba2;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Logout */
+        .logout {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logout a {
+            color: #ffdddd;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>CMS Admin</h2>
+
+    <a href="/enquiry">📋 Enquiry</a>
+    <a href="/admission">🎓 Admission</a>
+    <a href="/fees">💰 Fees</a>
+    <a href="/tc">📄 Transfer Certificate</a>
+
+    <div class="logout">
+        <a href="/logout">🚪 Logout</a>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="header">
+        Welcome to College Management Dashboard
+    </div>
+
+    <div class="cards">
+
+        <a href="/enquiry" class="card">
+            <h3>Enquiry Form</h3>
+            <p>Manage student enquiries</p>
+        </a>
+
+        <a href="/admission" class="card">
+            <h3>Admission</h3>
+            <p>Handle student admissions</p>
+        </a>
+
+        <a href="/fees" class="card">
+            <h3>Fees Status</h3>
+            <p>Check student fee records</p>
+        </a>
+
+        <a href="/tc" class="card">
+            <h3>Transfer Certificate</h3>
+            <p>Generate TC details</p>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

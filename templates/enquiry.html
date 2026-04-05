@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Enquiry Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #0b2a4a;
+        }
+
+        .main { 
+            padding: 40px 80px; 
+        }
+
+        h1 { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            color: white;
+        }
+
+        .slno { 
+            font-weight: bold; 
+            margin-bottom: 20px; 
+            color: white;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        label { 
+            display: block; 
+            margin-bottom: 6px; 
+            font-weight: 600; 
+            color: white;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        input[type="radio"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        textarea { 
+            height: 60px; 
+        }
+
+        .buttons { 
+            text-align: center; 
+            margin-top: 40px; 
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit { background: green; color: white; }
+        .clear { background: orange; }
+        .cancel { background: red; color: white; }
+
+        .route-section { display: none; }
+
+        /* ✅ SUCCESS BOX */
+        .success-box{
+            background:#d4edda;
+            color:#155724;
+            border:1px solid #c3e6cb;
+            padding:12px;
+            margin-bottom:20px;
+            border-radius:6px;
+            text-align:center;
+            font-weight:bold;
+            font-size:15px;
+        }
+    </style>
+
+<script>
+function toggleRoute() {
+    const yes = document.getElementById("bus_yes").checked;
+    const routeSection = document.getElementById("route_section");
+    routeSection.style.display = yes ? "block" : "none";
+}
+window.onload = toggleRoute;
+</script>
+
+</head>
+
+<body>
+
+<div class="main">
+
+<!-- ✅ SUCCESS MESSAGE (CORRECT PLACE) -->
+{% if msg %}
+<div class="success-box">
+    ✔ {{ msg }} !!
+</div>
+{% endif %}
+
+<h1>Student Enquiry Form</h1>
+
+<div class="slno">
+    SL No : {{ next_sl }}
+</div>
+
+<div style="margin-bottom:20px;">
+    <a href="/fees?sl_no={{ next_sl }}">
+        <button type="button" class="btn submit">Check Fees</button>
+    </a>
+</div>
+
+<form method="post">
+
+<!-- ROW 1 -->
+<div class="row">
+    <div class="form-group">
+        <label>Name of the Student</label>
+        <input name="name" required>
+    </div>
+
+    <div class="form-group">
+        <label>Mother Name</label>
+        <input name="mother" required>
+    </div>
+
+    <div class="form-group">
+        <label>Father Name</label>
+        <input name="father" required>
+    </div>
+</div>
+
+<!-- ROW 2 -->
+<div class="row">
+    <div class="form-group">
+        <label>Date of Birth</label>
+        <input type="date" name="dob" required>
+    </div>
+
+    <div class="form-group">
+        <label>Email ID</label>
+        <input type="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+        <label>Phone Number</label>
+        <input type="text" name="phone" maxlength="10" pattern="[0-9]{10}" required>
+    </div>
+</div>
+
+<!-- ROW 3 -->
+<div class="row">
+    <div class="form-group">
+        <label>Address</label>
+        <textarea name="address" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Branch</label>
+        <select name="branch">
+            <option>CSE</option><option>IT</option><option>ECE</option>
+            <option>EEE</option><option>MECH</option><option>MBA</option>
+            <option>MCA</option><option>AIDS</option><option>CIVIL</option>
+            <option>BCA</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Year</label>
+        <select name="year">
+            <option>SELECT YEAR</option>
+            <option>I(FIRST YEAR)</option>
+            <option>II(SECOND YEAR)</option>
+            <option>III(THIRD YEAR)</option>
+            <option>IV(FINAL YEAR)</option>
+        </select>
+    </div>
+</div>
+
+<!-- ROW 4 -->
+<div class="row">
+    <div class="form-group">
+        <label>Academic Type</label>
+        <select name="academic_type">
+            <option>Regular</option>
+            <option>Lateral Entry</option>
+            <option>Transfer</option>
+            <option>Distance Education</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Gender</label>
+        <select name="gender">
+            <option value="">Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Others</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Fees Status</label>
+        <select name="fees_status" required>
+            <option value="">Select Fees Status</option>
+            <option>Full Fees Paid</option>
+            <option>Partial Fees Paid</option>
+            <option>Fees Pending</option>
+        </select>
+    </div>
+</div>
+
+<!-- ROW 5 -->
+<div class="row">
+    <div class="form-group">
+        <label>Need Bus Service?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="bus_service" value="Yes" id="bus_yes" onclick="toggleRoute()"> Yes</label>
+            <label><input type="radio" name="bus_service" value="No" id="bus_no" onclick="toggleRoute()" checked> No</label>
+        </div>
+    </div>
+
+    <div class="form-group route-section" id="route_section">
+        <label>Select Route</label>
+        <select name="bus_route">
+            <option value="">Select Route</option>
+            <option>Arcot</option>
+            <option>Tvmalai</option>
+            <option>Chennai</option>
+            <option>Vellore</option>
+            <option>Ranipet</option>
+        </select>
+    </div>
+
+    <div class="form-group"></div>
+</div>
+
+<!-- BUTTONS -->
+<div class="buttons">
+    <button type="submit" class="btn submit">Submit</button>
+    <button type="reset" class="btn clear">Clear</button>
+    <button type="button" onclick="window.location.href='/home'" class="btn cancel">Cancel</button>
+</div>
+
+</form>
+</div>
+
+<!-- ✅ AUTO HIDE MESSAGE -->
+<script>
+setTimeout(() => {
+    const box = document.querySelector('.success-box');
+    if(box){
+        box.style.display = 'none';
+    }
+}, 3000);
+</script>
+
+</body>
+</html>

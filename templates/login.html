@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>College Management System - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0b2a4a, #2a5298);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background: #ffffff;    
+            padding: 45px;
+            width: 370px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .login-box input {
+            width: 90%;
+            padding: 13px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .login-box input:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 5px rgba(78,115,223,0.3);
+            outline: none;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 15px;
+            background-color: #4e73df;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-box button:hover {
+            background-color: #2e9dd9;
+        }
+
+        .links {
+            margin-top: 15px;
+        }
+
+        .links a {
+            display: block;
+            font-size: 14px;
+            text-decoration: none;
+            color: #4e73df;
+            margin-top: 8px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+    <h2>College Management System</h2>
+
+    <form method="post">
+        <input type="text" name="username" placeholder="Enter Username" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- ✅ FIXED LINKS -->
+    <div class="links">
+        <a href="/forgot">Forgot Password?</a>
+        <a href="/register">New User? Register</a>
+    </div>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <div class="footer-text">
+        © 2026 CMS | Admin Access Only
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Transfer Certificate</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Times New Roman',serif;
+    background:#1b3556;
+    padding:30px;
+}
+
+/* 🔥 SEARCH CONTAINER (LIKE YOUR IMAGE) */
+.search-container{
+    width:700px;
+    margin:30px auto;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.2);
+    text-align:center;
+}
+
+.search-container h2{
+    margin-bottom:20px;
+}
+
+.search-box{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.search-box input{
+    padding:15px;
+    width:300px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+.search-box button{
+    padding:15px 25px;
+    background:#5a6fd8;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.search-box button:hover{
+    background:#3f51b5;
+}
+
+/* 🔥 MAIN CERTIFICATE */
+.tc-box{
+    width:900px;
+    margin:30px auto;
+    background:#fdfaf3;
+    padding:40px;
+    border:8px double #c9a13b;
+}
+
+/* 🔥 HEADER BOX */
+.header-box{
+    width:80%;
+    margin:auto;
+    text-align:center;
+    background:#f2f2f2;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+    margin-bottom:20px;
+}
+
+.header-box h2{
+    margin:0;
+    color:#6b1e2b;
+}
+
+.header-box p{
+    margin:5px 0 0;
+    font-size:14px;
+}
+
+/* TITLE */
+.title{
+    text-align:center;
+    font-size:26px;
+    font-weight:bold;
+    margin:15px 0;
+    border-bottom:2px solid #333;
+    display:inline-block;
+    padding-bottom:5px;
+}
+
+/* TOP INFO */
+.top-info{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+    font-size:16px;
+}
+
+/* PHOTO */
+.photo{
+    float:right;
+    width:120px;
+    height:150px;
+    border:2px solid black;
+    text-align:center;
+    line-height:150px;
+    margin-left:20px;
+}
+
+/* TABLE */
+table{
+    width:100%;
+    margin-top:20px;
+    font-size:18px;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px dotted #555;
+}
+
+/* SIGN */
+.sign{
+    margin-top:60px;
+    display:flex;
+    justify-content:space-between;
+    text-align:center;
+}
+
+/* PRINT */
+@media print{
+    .search-container{display:none;}
+    body{background:white;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔥 SEARCH BOX -->
+<div class="search-container">
+    <h2>Check Transfer Certificate</h2>
+
+    <form method="POST" class="search-box">
+        <input type="number" name="sl_no" placeholder="Enter Student SL No" required>
+        <button type="submit">Generate TC</button>
+    </form>
+</div>
+
+{% if data %}
+
+<!-- 🔥 CERTIFICATE -->
+<div class="tc-box">
+
+<div class="header-box">
+    <h2>COLLEGE OF ENGINEERING AND TECHNOLOGY</h2>
+    <p>Chennai - 600001, Tamil Nadu</p>
+</div>
+
+<center>
+<div class="title">TRANSFER CERTIFICATE</div>
+</center>
+
+<div class="top-info">
+    <div><b>Admission No:</b> {{ data["enquiry_sl_no"] }}</div>
+    <div><b>EMIS No:</b> {{ data["emis_no"] }}</div>
+</div>
+
+<div class="photo">PHOTO</div>
+
+<table>
+<tr><td>1.</td><td>Student Name</td><td>{{ data["student_name"] }}</td></tr>
+<tr><td>2.</td><td>Father Name</td><td>{{ data["father_name"] }}</td></tr>
+<tr><td>3.</td><td>Mother Name</td><td>{{ data["mother_name"] }}</td></tr>
+<tr><td>4.</td><td>Gender</td><td>{{ data["gender"] }}</td></tr>
+<tr><td>5.</td><td>Date of Birth</td><td>{{ data["dob"] }}</td></tr>
+<tr><td>6.</td><td>Community</td><td>{{ data["community"] }}</td></tr>
+<tr><td>7.</td><td>Branch</td><td>{{ data["branch"] }}</td></tr>
+<tr><td>8.</td><td>Nationality</td><td>Indian</td></tr>
+<tr><td>9.</td><td>Conduct</td><td>Good</td></tr>
+<tr><td>10.</td><td>Reason for Leaving</td><td>Completed Course</td></tr>
+</table>
+
+<div class="sign">
+<div>
+_________________<br>
+Signature of Headmaster
+</div>
+
+<div>
+_________________<br>
+Signature of Principal
+</div>
+</div>
+
+<br><br>
+<center>
+<button onclick="window.print()">Print</button>
+</center>
+
+</div>
+
+{% endif %}
+
+</body>
+</html>

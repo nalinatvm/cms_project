@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Admission Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+    margin:0;
+    font-family:"Times New Roman",serif;
+    background:#0b2a4a;
+    padding:40px;
+}
+
+/* ✅ GREEN SUCCESS BOX */
+.success-box{
+    background:#d4edda;
+    color:#155724;
+    border:1px solid #c3e6cb;
+    padding:12px;
+    margin-bottom:20px;
+    border-radius:6px;
+    text-align:center;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.form-sheet{
+    background:white;
+    max-width:700px;
+    margin:auto;
+    padding:40px 50px;
+    border:1px solid #bbb;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+.header{
+    text-align:center;
+    border-bottom:2px solid #000;
+    padding-bottom:15px;
+    margin-bottom:25px;
+}
+.header h2{
+    margin:0;
+    font-size:26px;
+    letter-spacing:1px;
+}
+.header p{
+    margin:4px 0 0;
+    font-size:14px;
+}
+.form-group{
+    margin-bottom:18px;
+}
+label{
+    font-weight:bold;
+    display:block;
+    margin-bottom:6px;
+    font-size:15px;
+}
+input, select, textarea{
+    width:100%;
+    padding:8px;
+    border:1px solid #444;
+    font-size:14px;
+    border-radius:2px;
+}
+.search-section{
+    background:#f4f6fb;
+    padding:15px;
+    border:1px solid #ccc;
+    margin-bottom:25px;
+}
+.search-section input{
+    width:200px;
+}
+.button-group{
+    text-align:center;
+    margin-top:30px;
+}
+button{
+    padding:8px 18px;
+    margin:6px;
+    border:none;
+    font-size:14px;
+    cursor:pointer;
+}
+.btn-submit{background:#2e7d32;color:white;}
+.btn-clear{background:#f9a825;color:white;}
+.btn-cancel{background:#c62828;color:white;}
+button:hover{opacity:.85}
+.message{
+    color:red;
+    font-weight:bold;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ✅ SUCCESS MESSAGE (CORRECT PLACE) -->
+{% if msg %}
+<div class="success-box">
+    {{ msg }} !!
+</div>
+{% endif %}
+
+<div class="form-sheet">
+
+<div class="header">
+    <h2>STUDENT ADMISSION APPLICATION</h2>
+    <p>College Admission & Records Department</p>
+</div>
+
+<!-- SEARCH -->
+<div class="search-section">
+<form method="GET">
+    <label>Enter Enquiry SL No</label>
+    <input type="number" name="sl_no"
+           value="{{ request.args.get('sl_no','') }}" required>
+    <button type="submit" class="btn-submit">Search</button>
+</form>
+</div>
+
+{% if request.args.get('sl_no') and not student %}
+<p class="message">No student found with this SL No</p>
+{% endif %}
+
+<form method="POST">
+
+<input type="hidden" name="enquiry_sl_no"
+       value="{{ student['sl_no'] if student else '' }}">
+
+<div class="form-group">
+<label>1. Student Name</label>
+<input name="student_name" value="{{ student['name'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>2. Mother Name</label>
+<input name="mother_name" value="{{ student['mother'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>3. Father Name</label>
+<input name="father_name" value="{{ student['father'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>4. Phone Number</label>
+<input name="phone" value="{{ student['phone'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>5. Branch / Department</label>
+<input name="branch" value="{{ student['branch'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>6. Year</label>
+<input name="year" value="{{ student['year'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>7. Academic Type</label>
+<input name="academic_type" value="{{ student['academic_type'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>8. Email Address</label>
+<input name="email" type="email" value="{{ student['email'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>9. Date of Birth</label>
+<input name="dob" type="date" value="{{ student['dob'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>10. Gender</label>
+<select name="gender" required>
+    <option value="">Select Gender</option>
+    <option value="Male" {% if student and student['gender']=='Male' %}selected{% endif %}>Male</option>
+    <option value="Female" {% if student and student['gender']=='Female' %}selected{% endif %}>Female</option>
+    <option value="Other" {% if student and student['gender']=='Other' %}selected{% endif %}>Other</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>11. EMIS Number</label>
+<input name="emis_no" type="text" pattern="\d{16}" maxlength="16"
+       title="EMIS Number must be exactly 16 digits" required>
+</div>
+
+<div class="form-group">
+<label>12. Address for Communication</label>
+<textarea name="address" rows="3" required>{{ student['address'] if student else '' }}</textarea>
+</div>
+
+<div class="form-group">
+<label>13. Caste</label>
+<select name="caste" required>
+    <option value="">Select</option>
+    <option {% if student and student['caste']=='BC' %}selected{% endif %}>BC</option>
+    <option {% if student and student['caste']=='MBC' %}selected{% endif %}>MBC</option>
+    <option {% if student and student['caste']=='SC' %}selected{% endif %}>SC</option>
+    <option {% if student and student['caste']=='ST' %}selected{% endif %}>ST</option>
+    <option {% if student and student['caste']=='OC' %}selected{% endif %}>OC</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>14. Community</label>
+<input name="community" value="{{ student['community'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>15. Religion</label>
+<input name="religion" value="{{ student['religion'] if student else '' }}" required>
+</div>
+
+<div class="form-group">
+<label>16. Fees Status</label>
+<select name="fees_status" required>
+    <option value="">Select Fees Status</option>
+    <option value="Full Fees Paid" {% if student and student['fees_status']=='Full Fees Paid' %}selected{% endif %}>Full Fees Paid</option>
+    <option value="Partial Fees Paid" {% if student and student['fees_status']=='Partial Fees Paid' %}selected{% endif %}>Partial Fees Paid</option>
+    <option value="Fees Pending" {% if student and student['fees_status']=='Fees Pending' %}selected{% endif %}>Fees Pending</option>
+</select>
+</div>
+
+<div class="button-group">
+    <button type="submit" class="btn-submit">Submit Application</button>
+    <button type="reset" class="btn-clear">Clear</button>
+    <a href="/home"><button type="button" class="btn-cancel">Cancel</button></a>
+</div>
+
+</form>
+</div>
+</body>
+</html>

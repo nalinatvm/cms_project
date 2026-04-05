@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fees Status - CMS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+margin:0;
+font-family:'Segoe UI',Arial,sans-serif;
+background:linear-gradient(135deg,#0b2a4a);
+min-height:100vh;
+padding:40px 20px;
+}
+.container{max-width:900px;margin:auto;}
+.card{
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 15px 35px rgba(0,0,0,0.2);
+margin-bottom:30px;
+}
+h2{text-align:center;margin-bottom:25px;color:#333;}
+input{
+padding:10px;width:250px;border-radius:8px;border:1px solid #ccc;
+}
+button{
+padding:10px 20px;border:none;border-radius:8px;
+background:#667eea;color:white;cursor:pointer;
+}
+button:hover{background:#5563d6;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th{background:#667eea;color:white;padding:12px;}
+td{padding:12px;text-align:center;background:#f8f9fc;}
+tr:nth-child(even) td{background:#eef1f7;}
+.status-paid{color:green;font-weight:bold;}
+.status-partial{color:orange;font-weight:bold;}
+.status-pending{color:red;font-weight:bold;}
+.student-box{
+background:#f3f4ff;padding:15px;border-radius:10px;margin-bottom:20px;
+}
+.back-link{
+display:block;text-align:center;margin-top:20px;
+text-decoration:none;color:white;font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="card">
+<h2>Check Fees Status</h2>
+<form method="post" style="text-align:center;">
+<input type="number" name="sl_no" placeholder="Enter Student SL No" required>
+<button type="submit">Check Status</button>
+</form>
+</div>
+
+{% if student %}
+<div class="card">
+<h2>Student Details</h2>
+<div class="student-box">
+<p><b>Name :</b> {{ student["name"] }}</p>
+<p><b>Branch :</b> {{ student["branch"] }}</p>
+<p><b>Phone :</b> {{ student["phone"] }}</p>
+</div>
+</div>
+{% endif %}
+
+{% if result %}
+<div class="card">
+<h2>Fees Details</h2>
+<table>
+<tr>
+<th>Name</th>
+<th>Branch</th>
+<th>Year</th>
+<th>Status</th>
+<th>Amount</th>
+</tr>
+
+{% for r in result %}
+<tr>
+<td>{{ student["name"] }}</td>
+<td>{{ student["branch"] }}</td>
+<td>{{ r["year"] }}</td>
+
+
+<td class="
+{% if 'Full' in r['status'] %}
+status-paid
+{% elif 'Partial' in r['status'] %}
+status-partial
+{% else %}
+status-pending
+{% endif %}
+">
+
+{% if 'Full' in r['status'] %}
+✔ Fees Fully Paid
+{% elif 'Partial' in r['status'] %}
+⚠ Partial Payment
+{% else %}
+✖ Fees Pending
+{% endif %}
+
+</td>
+
+<td>₹ {{ r["amount"] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+</div>
+{% endif %}
+
+{% if student and not result %}
+<div class="card">
+<h2>Fees Details</h2>
+<table>
+<tr>
+<th>Name</th>
+<th>Branch</th>
+<th>Year</th>
+<th>Status</th>
+<th>Amount</th>
+</tr>
+<tr>
+<td>{{ student["name"] }}</td>
+<td>{{ student["branch"] }}</td>
+<td>-</td>
+<td>-</td>
+<td class="status-pending">✖ Fees Pending</td>
+<td>₹ 0</td>
+</tr>
+</table>
+</div>
+{% endif %}
+
+<a href="/home" class="back-link">← Back to Dashboard</a>
+
+</div>
+</body>
+</html>

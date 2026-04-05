@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - CMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #4e73df, #9b59b6); /* ✅ Gradient */
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .register-box {
+            background: #ffffff;
+            padding: 40px;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .register-box h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .register-box input {
+            width: 90%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .register-box input:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 5px rgba(78,115,223,0.3);
+            outline: none;
+        }
+
+        .register-box button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: #4e73df;
+            border: none;
+            color: white;
+            font-size: 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .register-box button:hover {
+            background-color: #3a5ccc;
+        }
+
+        .link {
+            margin-top: 15px;
+        }
+
+        .link a {
+            text-decoration: none;
+            color: #4e73df;
+            font-size: 14px;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-box">
+    <h2>New Register</h2>
+
+    <form method="post">
+        <input type="text" name="username" placeholder="Enter Username" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="link">
+        <a href="/">← Back to Login</a>
+    </div>
+</div>
+
+</body>
+</html>
