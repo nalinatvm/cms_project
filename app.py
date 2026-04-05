@@ -1,35 +1,46 @@
 # new update
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
+import os
 
 app = Flask(__name__)
 app.secret_key = "cms_secret_key"
 
+@app.before_request
+def initialize_database():
+    create_tables()
 # ---------------- DATABASE CONNECTION ----------------
 def connect_db():
-    conn = sqlite3.connect("new_database.db", timeout=30, check_same_thread=False)
+    db_path = os.path.join(os.getcwd(), "new_database.db")
+    conn = sqlite3.connect(db_path, timeout=30, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
 
 # ---------------- CREATE TABLES ----------------
 def create_tables():
-    with sqlite3.connect("new_database.db", timeout=30) as con:
-        cur = con.cursor()
+    conn = connect_db()
+    cur = conn.cursor()
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password TEXT
+    )
+    """)
 
-        # USERS TABLE
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS users(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT
-        )
-        """)
+    cur.execute("SELECT * FROM users WHERE username=?", ("admin",))
+    if not cur.fetchone():
+        cur.execute("INSERT INTO users (username,password) VALUES (?,?)",
+                    ("admin", "admin123"))
+
+    conn.commit()
+    conn.close()
 
         # DEFAULT ADMIN
-        cur.execute("SELECT * FROM users WHERE username=?", ("admin",))
-        if not cur.fetchone():
-            cur.execute("INSERT INTO users (username,password) VALUES (?,?)",
-                        ("admin", "admin123"))
+    cur.execute("SELECT * FROM users WHERE username=?", ("admin",))
+    if not cur.fetchone():
+        cur.execute("INSERT INTO users (username,password) VALUES (?,?)",
+                    ("admin", "admin123"))
 
         # ENQUIRY TABLE
         cur.execute("""
@@ -358,5 +369,5 @@ def logout():
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
-    create_tables()
-    app.run(debug=True, use_reloader=False)
+  app.run()
+    
