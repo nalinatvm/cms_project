@@ -6,9 +6,6 @@ import os
 app = Flask(__name__)
 app.secret_key = "cms_secret_key"
 
-@app.before_request
-def initialize_database():
-    create_tables()
 # ---------------- DATABASE CONNECTION ----------------
 def connect_db():
     db_path = os.path.join(os.getcwd(), "new_database.db")
@@ -20,6 +17,8 @@ def connect_db():
 def create_tables():
     conn = connect_db()
     cur = conn.cursor()
+
+    # USERS TABLE
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,78 +27,78 @@ def create_tables():
     )
     """)
 
+    # DEFAULT ADMIN
     cur.execute("SELECT * FROM users WHERE username=?", ("admin",))
     if not cur.fetchone():
         cur.execute("INSERT INTO users (username,password) VALUES (?,?)",
                     ("admin", "admin123"))
+
+    # ENQUIRY TABLE
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS enquiry(
+        sl_no INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        mother TEXT,
+        father TEXT,
+        address TEXT,
+        branch TEXT,
+        year TEXT,
+        academic_type TEXT,
+        gender TEXT,
+        fees_status TEXT,
+        bus_service TEXT,
+        bus_route TEXT,
+        email TEXT,
+        phone TEXT,
+        dob TEXT
+    )
+    """)
+
+    # ADMISSION TABLE
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS admission(
+        sl_no INTEGER PRIMARY KEY AUTOINCREMENT,
+        enquiry_sl_no INTEGER,
+        student_name TEXT,
+        mother_name TEXT,
+        father_name TEXT,
+        phone TEXT,
+        branch TEXT,
+        email TEXT,
+        dob TEXT,
+        address TEXT,
+        emis_no TEXT,
+        caste TEXT,
+        community TEXT,
+        religion TEXT,
+        fees_status TEXT,
+        gender TEXT,
+        year TEXT,
+        academic_type TEXT
+    )
+    """)
+
+    # FEES TABLE
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS fees(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_name TEXT,
+        branch TEXT,
+        year TEXT,
+        semester TEXT,
+        status TEXT,
+        amount INTEGER,
+        sl_no INTEGER
+    )
+    """)
 
     conn.commit()
     conn.close()
 
-        # DEFAULT ADMIN
-    cur.execute("SELECT * FROM users WHERE username=?", ("admin",))
-    if not cur.fetchone():
-        cur.execute("INSERT INTO users (username,password) VALUES (?,?)",
-                    ("admin", "admin123"))
-
-        # ENQUIRY TABLE
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS enquiry(
-            sl_no INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            mother TEXT,
-            father TEXT,
-            address TEXT,
-            branch TEXT,
-            year TEXT,
-            academic_type TEXT,
-            gender TEXT,
-            fees_status TEXT,
-            bus_service TEXT,
-            bus_route TEXT,
-            email TEXT,
-            phone TEXT,
-            dob TEXT
-        )
-        """)
-
-        # ADMISSION TABLE
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS admission(
-            sl_no INTEGER PRIMARY KEY AUTOINCREMENT,
-            enquiry_sl_no INTEGER,
-            student_name TEXT,
-            mother_name TEXT,
-            father_name TEXT,
-            phone TEXT,
-            branch TEXT,
-            email TEXT,
-            dob TEXT,
-            address TEXT,
-            emis_no TEXT,
-            caste TEXT,
-            community TEXT,
-            religion TEXT,
-            fees_status TEXT,
-            gender TEXT,
-            year TEXT,
-            academic_type TEXT
-        )
-        """)
-
-        # FEES TABLE
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS fees(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            student_name TEXT,
-            branch TEXT,
-            year TEXT,
-            semester TEXT,
-            status TEXT,
-            amount INTEGER,
-            sl_no INTEGER
-        )
-        """)
+# ---------------- AUTO CREATE DB ----------------
+@app.before_request
+def initialize_database():
+    create_tables()
 
 # ---------------- LOGIN ----------------
 @app.route("/", methods=["GET", "POST"])
@@ -111,16 +110,18 @@ def login():
                     (request.form.get("username",""), request.form.get("password","")))
         user = cur.fetchone()
         con.close()
+
         if user:
             session["user"] = request.form.get("username","")
             return redirect("/home")
         else:
             return "Invalid Username or Password"
+
     return render_template("login.html")
-#-------------------------------- FORGOT----------------------
+
+# ---------------- FORGOT PASSWORD ----------------
 @app.route("/forgot", methods=["GET","POST"])
 def forgot():
-
     if request.method == "POST":
         username = request.form["username"]
         new_password = request.form["password"]
@@ -128,7 +129,6 @@ def forgot():
         con = connect_db()
         cur = con.cursor()
 
-        # ✅ Check user exists
         cur.execute("SELECT * FROM users WHERE username=?", (username,))
         user = cur.fetchone()
 
@@ -145,10 +145,9 @@ def forgot():
 
     return render_template("forgot.html")
 
-#---------------------------REGISTER---------------------
+# ---------------- REGISTER ----------------
 @app.route("/register", methods=["GET","POST"])
 def register():
-
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -156,7 +155,6 @@ def register():
         con = connect_db()
         cur = con.cursor()
 
-        # ✅ Check if user already exists
         cur.execute("SELECT * FROM users WHERE username=?", (username,))
         user = cur.fetchone()
 
@@ -164,7 +162,6 @@ def register():
             con.close()
             return "Username already exists ❌"
 
-        # ✅ Insert new user
         cur.execute("INSERT INTO users (username, password) VALUES (?, ?)",
                     (username, password))
         con.commit()
@@ -181,7 +178,7 @@ def home():
         return redirect("/")
     return render_template("home.html")
 
-#--------------------------- ENQUIRY ----------------------------------
+# ---------------- ENQUIRY ----------------
 @app.route("/enquiry", methods=["GET", "POST"])
 def enquiry():
     if "user" not in session:
@@ -194,7 +191,6 @@ def enquiry():
     last = cur.fetchone()[0]
     next_sl = 1 if last is None else last + 1
 
-    # POST → INSERT + STORE MESSAGE
     if request.method == "POST":
         cur.execute("""
         INSERT INTO enquiry (
@@ -223,15 +219,15 @@ def enquiry():
         con.commit()
         con.close()
 
-        # ✅ store message
         session["msg"] = "Enquiry submitted successfully"
         return redirect("/enquiry")
 
-    # ✅ GET → show message once
     msg = session.pop("msg", None)
-
     con.close()
+
     return render_template("enquiry.html", next_sl=next_sl, msg=msg)
+
+
 # ---------------- ADMISSION ----------------
 @app.route('/admission', methods=['GET', 'POST'])
 def admission():
