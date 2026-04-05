@@ -95,11 +95,6 @@ def create_tables():
     conn.commit()
     conn.close()
 
-# ---------------- AUTO CREATE DB ----------------
-@app.before_request
-def initialize_database():
-    create_tables()
-
 # ---------------- LOGIN ----------------
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -365,5 +360,6 @@ def logout():
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
+  create_tables()
   app.run()
     
